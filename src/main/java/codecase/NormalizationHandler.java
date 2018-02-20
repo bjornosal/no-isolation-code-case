@@ -6,17 +6,10 @@ import java.util.Set;
 
 public class NormalizationHandler {
 
-    FileHandler fileHandler;
-    private Set<String> normalizedPhoneNumbers;
-    private ArrayList<Integer> lineNumbersOfImparsableNumbers;
-
     public NormalizationHandler() {
-        fileHandler = new FileHandler();
-        normalizedPhoneNumbers = new HashSet<>();
-        lineNumbersOfImparsableNumbers = new ArrayList<>();
     }
 
-    private String normalizePhoneNumber(String phoneNumber) {
+    public String normalizePhoneNumber(String phoneNumber) {
         String normalizedPhoneNumber = phoneNumber;
         if(lengthOfPhoneNumberIsHighEnough(normalizedPhoneNumber)){
             if(!countryCodeIndicatorIsPlusCharacter(normalizedPhoneNumber)) {
@@ -31,10 +24,14 @@ public class NormalizationHandler {
                 return phoneNumber;
             }
 
-
-
+            if(getCountryCodeFromPhoneNumber(normalizedPhoneNumber).equals("47")) {
+                return normalizeNorwegianPhoneNumber(normalizedPhoneNumber);
+            } else if(getCountryCodeFromPhoneNumber(normalizedPhoneNumber).equals("46")) {
+                return normalizeSwedishPhoneNumber(normalizedPhoneNumber);
+            } else if(getCountryCodeFromPhoneNumber(normalizedPhoneNumber).equals("45")) {
+                return normalizeDanishPhoneNumber(normalizedPhoneNumber);
+            }
         }
-
         return phoneNumber;
 
         /*
