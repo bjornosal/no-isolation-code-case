@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class PrintHandler {
+public class FileHandler {
 
     //TODO WRite printwithFRomAndTo
     public void printToFile(Set<String> phoneNumbers, String filePath) {
@@ -15,9 +15,9 @@ public class PrintHandler {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(filePath), "utf-8"))) {
 
-            for(int i = 0; i < phoneNumbersToPrint.size(); i++) {
+            for (int i = 0; i < phoneNumbersToPrint.size(); i++) {
                 writer.write(phoneNumbersToPrint.get(i));
-                if(i != phoneNumbersToPrint.size()-1) {
+                if (i != phoneNumbersToPrint.size() - 1) {
                     writer.write(System.lineSeparator());
                 }
             }
@@ -30,4 +30,18 @@ public class PrintHandler {
         }
     }
 
+    public ArrayList<String> getPhoneNumbersFromFile(String filePath) {
+        ArrayList<String> phoneNumbersFromFile = new ArrayList<>();
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            while (bufferedReader.ready()) {
+                phoneNumbersFromFile.add(bufferedReader.readLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("What?! There is no file there.");
+        } catch (IOException e) {
+            System.out.println("Damn. Our librarian broke.");
+        }
+        return phoneNumbersFromFile;
+    }
 }

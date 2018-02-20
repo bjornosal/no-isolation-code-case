@@ -5,11 +5,12 @@ public class App {
 
     public static void main(String[] args) {
         PhoneNumberGenerator phoneNumberGenerator = new PhoneNumberGenerator();
-        PrintHandler printHandler = new PrintHandler();
-
+        FileHandler fileHandler = new FileHandler();
+        NormalizationHandler normalizationHandler = new NormalizationHandler();
         phoneNumberGenerator.generateSetAmountOfPhoneNumbers(1000);
 
-        printHandler.printToFile(phoneNumberGenerator.getPhoneNumbers(), "./phoneNumbers.txt");
+        //fileHandler.printToFile(phoneNumberGenerator.getPhoneNumbers(), "./phoneNumbers.txt");
+        System.out.println(normalizationHandler.normalizeSwedishPhoneNumber("+4612345678"));
     }
 
 }
