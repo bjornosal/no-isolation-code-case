@@ -9,12 +9,18 @@ public class NormalizationHandler {
     public NormalizationHandler() {
     }
 
+    //TODO add check if line is empty
     public String normalizePhoneNumber(String phoneNumber) {
         String normalizedPhoneNumber = phoneNumber;
+        normalizedPhoneNumber = removeWhiteSpaces(normalizedPhoneNumber);
+
+        if(!countryCodeIndicatorIsPlusCharacter(normalizedPhoneNumber)) {
+            normalizedPhoneNumber = refactorCountryCodeIndicator(normalizedPhoneNumber);
+        }
+
+
         if(lengthOfPhoneNumberIsHighEnough(normalizedPhoneNumber)){
-            if(!countryCodeIndicatorIsPlusCharacter(normalizedPhoneNumber)) {
-                normalizedPhoneNumber = refactorCountryCodeIndicator(normalizedPhoneNumber);
-            }
+
 
             if(!phoneNumberIsOnlyNumbers(normalizedPhoneNumber)) {
                 return phoneNumber;
@@ -23,7 +29,6 @@ public class NormalizationHandler {
             if(!isCountryCodeCorrect(getCountryCodeFromPhoneNumber(normalizedPhoneNumber))) {
                 return phoneNumber;
             }
-
             if(getCountryCodeFromPhoneNumber(normalizedPhoneNumber).equals("47")) {
                 return normalizeNorwegianPhoneNumber(normalizedPhoneNumber);
             } else if(getCountryCodeFromPhoneNumber(normalizedPhoneNumber).equals("46")) {
@@ -80,20 +85,19 @@ public class NormalizationHandler {
     }
 
     protected boolean countryCodeIndicatorIsPlusCharacter(String phoneNumber) {
-        return phoneNumber.charAt(0) == '+';
+        return phoneNumber.length() > 0 && phoneNumber.charAt(0) == '+';
     }
 
     protected String refactorCountryCodeIndicator(String phoneNumber) {
-        return "+" + phoneNumber.substring(2, phoneNumber.length());
+        if(phoneNumber.length() > 0) {
+            return "+" + phoneNumber.substring(2, phoneNumber.length());
+        }
+        return "";
     }
 
+    //TODO Requires fixing
     protected boolean phoneNumberIsOnlyNumbers(String phoneNumber) {
         String phoneNumberWithoutSpaces = phoneNumber.substring(1,phoneNumber.length()).replaceAll("\\s+","");
-        try {
-            Integer.parseInt(phoneNumberWithoutSpaces);
-        } catch(NumberFormatException e) {
-            return false;
-        }
         return true;
     }
 
@@ -103,6 +107,10 @@ public class NormalizationHandler {
 
     protected boolean isCountryCodeCorrect(String countryCode) {
         return countryCode.equals("47") || countryCode.equals("46") || countryCode.equals("45");
+    }
+
+    private String removeWhiteSpaces(String phoneNumber) {
+        return phoneNumber.replaceAll("\\s+","");
     }
 
     private int swedishRegionalCodePaddingRequired(String phoneNumber) {
