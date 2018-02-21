@@ -1,7 +1,6 @@
 package codecase;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ExecutionHandler {
@@ -12,7 +11,7 @@ public class ExecutionHandler {
 
     private ArrayList<String> phoneNumbersToNormalize;
     private ArrayList<String> normalizedPhoneNumbers;
-    private ArrayList<String> phoneNumbersUnableToParse;
+    private ArrayList<String> phoneNumbersUnableToNormalize;
     private String printPath;
     private String filePath;
 
@@ -22,7 +21,7 @@ public class ExecutionHandler {
         phoneNumberGenerator= new PhoneNumberGenerator();
         phoneNumbersToNormalize = null;
         normalizedPhoneNumbers = new ArrayList<>();
-        phoneNumbersUnableToParse = new ArrayList<>();
+        phoneNumbersUnableToNormalize = new ArrayList<>();
         this.printPath = printPath;
         this.filePath = filePath;
     }
@@ -37,6 +36,15 @@ public class ExecutionHandler {
         normalizeAllPhoneNumbers();
         fileHandler.printArrayListToFile(normalizedPhoneNumbers, printPath);
 
+        if(phoneNumbersUnableToNormalize.size() != 0) {
+            normalizedPhoneNumbers.addAll(phoneNumbersUnableToNormalize);
+
+            fileHandler.printArrayListToFile(normalizedPhoneNumbers, revisePrintPathFileNameWithLineNumbers(printPath));
+        }
+    }
+
+    private String revisePrintPathFileNameWithLineNumbers(String printPath) {
+        return printPath.substring(0, printPath.lastIndexOf('.')-1) + "-with-line-numbers.txt";
     }
 
     private void normalizeAllPhoneNumbers() {
@@ -47,14 +55,13 @@ public class ExecutionHandler {
                 tempNumber = normalizationHandler.normalizePhoneNumber(tempNumber);
 
                 if (phoneNumbersToNormalize.get(i).equals(tempNumber)) {
-                    phoneNumbersUnableToParse.add("Line: " + (i + 1) + " => " + tempNumber);
+                    phoneNumbersUnableToNormalize.add("Line: " + (i + 1) + " => " + tempNumber);
                 }
                 normalizedPhoneNumbers.add(tempNumber);
             } else {
                 normalizedPhoneNumbers.add(tempNumber);
             }
         }
-        normalizedPhoneNumbers.addAll(phoneNumbersUnableToParse);
     }
 
 }

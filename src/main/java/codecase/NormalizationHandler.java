@@ -21,35 +21,36 @@ public class NormalizationHandler {
             return true;
         }
 
-        if(getCountryCodeFromPhoneNumber(tempNumber).equals("47")) {
-            country = Country.NOR;
-            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
+        switch (getCountryCodeFromPhoneNumber(tempNumber)) {
+            case "47":
+                country = Country.NOR;
+                if (!lengthOfPhoneNumberIsCorrect(tempNumber, country)) {
+                    return true;
+                }
+                break;
+            case "46":
+                country = Country.SWE;
+                if (!lengthOfPhoneNumberIsCorrect(tempNumber, country)) {
+                    return true;
+                }
+                if (!(tempNumber.substring(4, 5).equals("(") && tempNumber.substring(9, 10).equals(")"))) {
+                    return true;
+                } else {
+                    tempNumber = tempNumber.replaceAll("\\(|\\)+", "");
+                }
+                break;
+            case "45":
+                country = Country.DEN;
+                if (!lengthOfPhoneNumberIsCorrect(tempNumber, country)) {
+                    return true;
+                }
+                break;
+            default:
                 return true;
-            }
-        } else if(getCountryCodeFromPhoneNumber(tempNumber).equals("46")) {
-            country = Country.SWE;
-            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
-                return true;
-            }
-            if(!(tempNumber.substring(4,5).equals("(") && tempNumber.substring(9,10).equals(")"))) {
-                return true;
-            } else {
-                tempNumber = tempNumber.replaceAll("\\(|\\)+", "");
-            }
-        } else if(getCountryCodeFromPhoneNumber(tempNumber).equals("45")) {
-            country = Country.DEN;
-            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
-                return true;
-            }
-        } else {
-            return true;
         }
 
-        if(!phoneNumberIsOnlyNumbers(tempNumber, country)) {
-            return true;
-        }
+        return !phoneNumberIsOnlyNumbers(tempNumber, country);
 
-        return false;
     }
 
     public String normalizePhoneNumber(String phoneNumber) {
@@ -111,15 +112,7 @@ public class NormalizationHandler {
     private String normalizeDanishPhoneNumber(String phoneNumber) {
         return new StringBuilder(phoneNumber).insert(3, " ").insert(6, " ").insert(9, " ").insert(12, " ").toString();
     }
-    /**
-     * Checks if length of number is larger than or equal to 11. (8 + 2 + 1)
-     * 8: Phone number
-     * 2: Country code
-     * 1: Least size of country code indicator
-     *
-     * @param phoneNumber to check
-     * @return if big enough number.
-     */
+
     private boolean lengthOfPhoneNumberIsCorrect(String phoneNumber, Country country) {
 
         switch (country) {
