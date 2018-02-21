@@ -1,5 +1,6 @@
 package codecase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -129,4 +130,10 @@ public class NormalizationHandlerTest {
 
         assertFalse(nh.phoneNumberNeedsNormalization(phoneNumber));
     }
+
+    @After
+    public void tearDown() {
+        nh = null;
+    }
+
 }

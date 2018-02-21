@@ -1,21 +1,20 @@
 package codecase;
 
 
+
 public class App {
 
 
     public static void main(String[] args) {
-        PhoneNumberGenerator phoneNumberGenerator = new PhoneNumberGenerator();
-        phoneNumberGenerator.generateSetAmountOfPhoneNumbers(1000);
+        App app = new App();
+        app.runApp("./phoneNumbers.txt", "./normalizedPhoneNumbers.txt");
+    }
 
-        FileHandler fileHandler = new FileHandler();
-//        fileHandler.printSetToFile(phoneNumberGenerator.getPhoneNumbers(), "./phoneNumbers.txt");
+    private void runApp(String filePath, String printPath) {
 
-        ExecutionHandler executionHandler = new ExecutionHandler("./phoneNumbers.txt", "./normalizedPhoneNumbers.txt");
+        ExecutionHandler executionHandler = new ExecutionHandler(filePath, printPath);
         executionHandler.runApplication();
 
-
-        //fileHandler.printToFile(phoneNumberGenerator.getPhoneNumbers(), "./phoneNumbers.txt");
     }
 
 }

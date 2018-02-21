@@ -8,8 +8,7 @@ public class FileHandler {
 
     public void printSetToFile(Set<String> phoneNumbers, String filePath) {
 
-        ArrayList<String> phoneNumbersToPrint = new ArrayList<>();
-        phoneNumbersToPrint.addAll(phoneNumbers);
+        ArrayList<String> phoneNumbersToPrint = new ArrayList<>(phoneNumbers);
 
         printArrayListToFile(phoneNumbersToPrint, filePath);
     }
