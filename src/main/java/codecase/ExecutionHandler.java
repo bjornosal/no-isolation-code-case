@@ -28,13 +28,18 @@ public class ExecutionHandler {
     private void normalizeAllPhoneNumbers() {
 
         for(int i = 0; i < phoneNumbersToNormalize.size(); i++) {
-            String normalizedPhoneNumber = normalizationHandler.normalizePhoneNumber(phoneNumbersToNormalize.get(i));
-            if(phoneNumbersToNormalize.get(i).equals(normalizedPhoneNumber)) {
-                phoneNumbersUnableToParse.add("Line: " + (i+1) +" => "+ normalizedPhoneNumber);
-            }
-            normalizedPhoneNumbers.add(normalizedPhoneNumber);
-        }
+            String tempNumber = phoneNumbersToNormalize.get(i);
+            if (normalizationHandler.phoneNumberNeedsNormalization(tempNumber)) {
+                tempNumber = normalizationHandler.normalizePhoneNumber(tempNumber);
 
+                if (phoneNumbersToNormalize.get(i).equals(tempNumber)) {
+                    phoneNumbersUnableToParse.add("Line: " + (i + 1) + " => " + tempNumber);
+                }
+                normalizedPhoneNumbers.add(tempNumber);
+            } else {
+                normalizedPhoneNumbers.add(tempNumber);
+            }
+        }
         normalizedPhoneNumbers.addAll(phoneNumbersUnableToParse);
     }
 

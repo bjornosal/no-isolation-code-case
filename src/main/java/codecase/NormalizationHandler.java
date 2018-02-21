@@ -5,7 +5,7 @@ public class NormalizationHandler {
     public NormalizationHandler() {
     }
 
-    private boolean phoneNumberNeedsNormalization(String phoneNumber) {
+    public boolean phoneNumberNeedsNormalization(String phoneNumber) {
         String tempNumber = phoneNumber;
         Country country;
 
@@ -23,23 +23,22 @@ public class NormalizationHandler {
 
         if(getCountryCodeFromPhoneNumber(tempNumber).equals("47")) {
             country = Country.NOR;
-            if(tempNumber.length() != 14){
+            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
                 return true;
             }
         } else if(getCountryCodeFromPhoneNumber(tempNumber).equals("46")) {
             country = Country.SWE;
-            if(tempNumber.length() != 21) {
+            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
                 return true;
             }
             if(!(tempNumber.substring(4,5).equals("(") && tempNumber.substring(9,10).equals(")"))) {
                 return true;
             } else {
-                //TODO test this
                 tempNumber = tempNumber.replaceAll("\\(|\\)+", "");
             }
         } else if(getCountryCodeFromPhoneNumber(tempNumber).equals("45")) {
             country = Country.DEN;
-            if(tempNumber.length() != 15) {
+            if(!lengthOfPhoneNumberIsCorrect(tempNumber, country)){
                 return true;
             }
         } else {
@@ -141,7 +140,7 @@ public class NormalizationHandler {
             case NOR:
                 return (tempNumber.length() == 11) || (tempNumber.length() == 12);
             case SWE:
-                return (tempNumber.length() >= 12) && (tempNumber.length() <= 21);
+                return (tempNumber.length() >= 11) && (tempNumber.length() <= 21);
             case DEN:
                 return (tempNumber.length() == 11) || (tempNumber.length() == 12);
             default:
@@ -193,7 +192,13 @@ public class NormalizationHandler {
 
     //TODO needs refactoring to work
     private int swedishRegionalCodePaddingRequired(String phoneNumber) {
-        return 15 - phoneNumber.length();
+        String tempNumber = removeWhiteSpaces(phoneNumber.replaceAll("\\(|\\)+", "").substring(1));
+        /*if(tempNumber.length() == 10) {
+            return 1;
+        } else {
+            return tempNumber.length() - 10;
+        }*/
+        return 14 - tempNumber.length();
     }
 
     private String addSwedishRegionalCode(String phoneNumber) {
