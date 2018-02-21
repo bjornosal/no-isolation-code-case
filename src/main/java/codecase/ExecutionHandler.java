@@ -8,7 +8,7 @@ public class ExecutionHandler {
     private NormalizationHandler normalizationHandler;
     private ArrayList<String> phoneNumbersToNormalize;
     private ArrayList<String> normalizedPhoneNumbers;
-    private ArrayList<String> imparseablePhoneNumbers;
+    private ArrayList<String> phoneNumbersUnableToParse;
     private String printPath;
 
     public ExecutionHandler(String filePath, String printPath) {
@@ -16,7 +16,7 @@ public class ExecutionHandler {
         normalizationHandler = new NormalizationHandler();
         phoneNumbersToNormalize = fileHandler.getPhoneNumbersFromFile(filePath);
         normalizedPhoneNumbers = new ArrayList<>();
-        imparseablePhoneNumbers = new ArrayList<>();
+        phoneNumbersUnableToParse = new ArrayList<>();
         this.printPath = printPath;
     }
 
@@ -30,12 +30,12 @@ public class ExecutionHandler {
         for(int i = 0; i < phoneNumbersToNormalize.size(); i++) {
             String normalizedPhoneNumber = normalizationHandler.normalizePhoneNumber(phoneNumbersToNormalize.get(i));
             if(phoneNumbersToNormalize.get(i).equals(normalizedPhoneNumber)) {
-                imparseablePhoneNumbers.add("Line: " + i +" => "+ normalizedPhoneNumber);
+                phoneNumbersUnableToParse.add("Line: " + (i+1) +" => "+ normalizedPhoneNumber);
             }
             normalizedPhoneNumbers.add(normalizedPhoneNumber);
         }
 
-        normalizedPhoneNumbers.addAll(imparseablePhoneNumbers);
+        normalizedPhoneNumbers.addAll(phoneNumbersUnableToParse);
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import static codecase.CountryCode.*;
+import static codecase.Country.*;
 
 public class PhoneNumberGenerator {
 
@@ -109,9 +109,9 @@ public class PhoneNumberGenerator {
         return result;
     }
 
-    private String addCountryCodeToPhoneNumber(CountryCode countryCode, String phoneNumber) {
+    private String addCountryCodeToPhoneNumber(Country country, String phoneNumber) {
 
-        switch (countryCode) {
+        switch (country) {
             case NOR:
                 return addCountryCodeIndicatorToPhoneNumber("47"+phoneNumber);
             case SWE:

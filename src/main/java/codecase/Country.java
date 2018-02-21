@@ -1,6 +1,6 @@
 package codecase;
 
-public enum CountryCode {
+public enum Country {
     NOR,
     SWE,
     DEN
