@@ -10,9 +10,14 @@ public class App {
         app.runApp("./phoneNumbers.txt", "./normalizedPhoneNumbers.txt");
     }
 
-    private void runApp(String filePath, String printPath) {
+    /**
+     * Runs the application
+     * @param inputFilePath inputfile filepath
+     * @param outputFilePath outputfile filepath
+     */
+    private void runApp(String inputFilePath, String outputFilePath) {
 
-        ExecutionHandler executionHandler = new ExecutionHandler(filePath, printPath);
+        ExecutionHandler executionHandler = new ExecutionHandler(inputFilePath, outputFilePath);
         executionHandler.runApplication();
 
     }

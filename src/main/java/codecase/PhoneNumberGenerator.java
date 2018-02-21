@@ -18,11 +18,16 @@ public class PhoneNumberGenerator {
         MAX_AMOUNT_OF_SPACES = 3;
     }
 
+
+    /**
+     * Generates given amount of phone numbers
+     * @param amountOfPhoneNumbers to produce
+     */
     public void generateSetAmountOfPhoneNumbers(int amountOfPhoneNumbers) {
         while(phoneNumbers.size() < amountOfPhoneNumbers) {
 
             int typeOfPhoneNumber = random.nextInt(4);
-            //TODO add counters for each type added.
+
             switch (typeOfPhoneNumber) {
                 case 0:
                     phoneNumbers.add(generateNorwegianPhoneNumber());
@@ -43,18 +48,34 @@ public class PhoneNumberGenerator {
         }
     }
 
+    /**
+     * Generates norwegian phone number
+     * @return phone number
+     */
     private String generateNorwegianPhoneNumber() {
         return addCountryCodeToPhoneNumber(NOR, generatePhoneNumber());
     }
 
+    /**
+     * Generates swedish phone number
+     * @return phone number
+     */
     private String generateSwedishPhoneNumber() {
         return addCountryCodeToPhoneNumber(SWE, addSwedishRegionalCode(generatePhoneNumber()));
     }
 
+    /**
+     * Generates danish phone number
+     * @return phone number
+     */
     private String generateDanishPhoneNumber() {
         return addCountryCodeToPhoneNumber(DEN, generatePhoneNumber());
     }
 
+    /**
+     * Generating phone number which should not be normalized
+     * @return phone number generated
+     */
     private String generatePhoneNumberWhichShouldProduceErrors() {
         String result = generatePhoneNumber();
         result = result.substring(random.nextInt(result.length()), result.length());
@@ -71,6 +92,10 @@ public class PhoneNumberGenerator {
         }
     }
 
+    /**
+     * Generates a random phone number
+     * @return returns phone number generated
+     */
     private String generatePhoneNumber() {
         StringBuilder sb = new StringBuilder();
         while(sb.length() < 8) {
@@ -80,6 +105,11 @@ public class PhoneNumberGenerator {
         return addRandomSpacesToPhoneNumber(sb.toString());
     }
 
+    /**
+     * Adds a swedish regional code to a number
+     * @param phoneNumber to add to
+     * @return phonenumber with added regional code
+     */
     private String addSwedishRegionalCode(String phoneNumber) {
         int amountOfRegionalNumbers = random.nextInt(5);
 
@@ -91,6 +121,11 @@ public class PhoneNumberGenerator {
         return sb.append(phoneNumber).toString();
     }
 
+    /**
+     * Adds random spaces to a phone number
+     * @param phoneNumber to add to
+     * @return phone number with added spaces
+     */
     private String addRandomSpacesToPhoneNumber(String phoneNumber) {
         int amountOfSpacesToBeAdded = random.nextInt(MAX_AMOUNT_OF_SPACES);
 
@@ -109,6 +144,12 @@ public class PhoneNumberGenerator {
         return result;
     }
 
+    /**
+     * Adds country code to phone number
+     * @param country which countrycode to add
+     * @param phoneNumber to add to
+     * @return phone number with country code
+     */
     private String addCountryCodeToPhoneNumber(Country country, String phoneNumber) {
 
         switch (country) {
@@ -123,6 +164,11 @@ public class PhoneNumberGenerator {
         }
     }
 
+    /**
+     * Add country code indicator (+ or 00) to phone number
+     * @param phoneNumber to add to
+     * @return phone number with added country code indicator
+     */
     private String addCountryCodeIndicatorToPhoneNumber(String phoneNumber) {
         int type = random.nextInt(2);
 

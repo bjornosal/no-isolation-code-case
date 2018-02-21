@@ -6,6 +6,11 @@ import java.util.Set;
 
 public class FileHandler {
 
+    /**
+     * Prints a set to file
+     * @param phoneNumbers to print
+     * @param filePath location to print to
+     */
     public void printSetToFile(Set<String> phoneNumbers, String filePath) {
 
         ArrayList<String> phoneNumbersToPrint = new ArrayList<>(phoneNumbers);
@@ -13,6 +18,11 @@ public class FileHandler {
         printArrayListToFile(phoneNumbersToPrint, filePath);
     }
 
+    /**
+     * Retrieves phone numbers from a file path
+     * @param filePath file to get numbers from
+     * @return ArrayList of numbers.
+     */
     public ArrayList<String> getPhoneNumbersFromFile(String filePath) {
         ArrayList<String> phoneNumbersFromFile = new ArrayList<>();
 
@@ -28,6 +38,11 @@ public class FileHandler {
         return phoneNumbersFromFile;
     }
 
+    /**
+     * Prints an ArrayList to a file.
+     * @param phoneNumbers arraylist with phone numbers
+     * @param filePath where to print
+     */
     public void printArrayListToFile(ArrayList<String> phoneNumbers, String filePath) {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(filePath), "utf-8"))) {

@@ -5,6 +5,11 @@ public class NormalizationHandler {
     public NormalizationHandler() {
     }
 
+    /**
+     * Checks if a phone number needs to be normalized
+     * @param phoneNumber phone number to check
+     * @return boolean if it needs to be normalized
+     */
     public boolean phoneNumberNeedsNormalization(String phoneNumber) {
         String tempNumber = phoneNumber;
         Country country;
@@ -53,6 +58,12 @@ public class NormalizationHandler {
 
     }
 
+
+    /**
+     * Normalizes a phone number
+     * @param phoneNumber phone number to normalize
+     * @return normalized phone number
+     */
     public String normalizePhoneNumber(String phoneNumber) {
 
         String tempNumber = phoneNumber;
@@ -82,11 +93,11 @@ public class NormalizationHandler {
         tempNumber = removeWhiteSpaces(tempNumber);
 
         if(country == Country.NOR) {
-            return normalizeNorwegianPhoneNumber(tempNumber);
+            return addFormattingToNorwegianPhoneNumber(tempNumber);
         } else if(country == Country.SWE) {
-            return normalizeSwedishPhoneNumber(tempNumber);
+            return addFormattingToSwedishPhoneNumber(tempNumber);
         } else if(country == Country.DEN) {
-            return normalizeDanishPhoneNumber(tempNumber);
+            return addFormattingToDanishPhoneNumber(tempNumber);
         }
 
         return phoneNumber;
@@ -94,12 +105,21 @@ public class NormalizationHandler {
     }
 
 
-
-    private String normalizeNorwegianPhoneNumber(String phoneNumber) {
+    /**
+     * Formats a norwegian phone number
+     * @param phoneNumber to format
+     * @return formatted phone number
+     */
+    private String addFormattingToNorwegianPhoneNumber(String phoneNumber) {
         return new StringBuilder(phoneNumber).insert(3, " ").insert(7, " ").insert(10, " ").toString();
     }
 
-    private String normalizeSwedishPhoneNumber(String phoneNumber) {
+    /**
+     * Formats a swedish phone number
+     * @param phoneNumber to format
+     * @return formatted phone number
+     */
+    private String addFormattingToSwedishPhoneNumber(String phoneNumber) {
 
         if(swedishRegionalCodePaddingRequired(phoneNumber) == 4){
             return new StringBuilder(phoneNumber).insert(3, " (0) ").toString();
@@ -109,10 +129,21 @@ public class NormalizationHandler {
         return new StringBuilder(result).insert(3," (").insert(9, ") ").toString();
     }
 
-    private String normalizeDanishPhoneNumber(String phoneNumber) {
+    /**
+     * Formats a danish phone number
+     * @param phoneNumber to format
+     * @return formatted phone number
+     */
+    private String addFormattingToDanishPhoneNumber(String phoneNumber) {
         return new StringBuilder(phoneNumber).insert(3, " ").insert(6, " ").insert(9, " ").insert(12, " ").toString();
     }
 
+    /**
+     * Checks if the length of a phone number is correct
+     * @param phoneNumber to check
+     * @param country code to check for
+     * @return if length is correct
+     */
     private boolean lengthOfPhoneNumberIsCorrect(String phoneNumber, Country country) {
 
         switch (country) {
@@ -127,6 +158,12 @@ public class NormalizationHandler {
         }
     }
 
+    /**
+     * Checks if the length is within the requirements for a phone number (Not too short/too long).
+     * @param phoneNumber to check
+     * @param country to check for
+     * @return if length is within parameters
+     */
     private boolean lengthOfPhoneNumberIsWithinLengthRequirements(String phoneNumber, Country country) {
         String tempNumber = removeWhiteSpaces(phoneNumber);
         switch (country) {
@@ -141,10 +178,20 @@ public class NormalizationHandler {
         }
     }
 
+    /**
+     * Checks if country code indicator is plus character
+     * @param phoneNumber to check
+     * @return if country code is '+'
+     */
     private boolean countryCodeIndicatorIsPlusCharacter(String phoneNumber) {
         return phoneNumber.charAt(0) == '+';
     }
 
+    /**
+     * Refactors country code indicator
+     * @param phoneNumber to refactor
+     * @return phone number with '+' instead of '00'
+     */
     private String refactorCountryCodeIndicator(String phoneNumber) {
         if(phoneNumber.length() > 0) {
             return "+" + phoneNumber.substring(2, phoneNumber.length());
@@ -152,10 +199,21 @@ public class NormalizationHandler {
         return "";
     }
 
+    /**
+     * Checks if phone Number is empty
+     * @param phoneNumber to check
+     * @return if number is empty
+     */
     private boolean phoneNumberIsEmpty(String phoneNumber) {
         return phoneNumber.replaceAll("\\s+", "").isEmpty();
     }
 
+    /**
+     * checks if phone number is only numbers
+     * @param phoneNumber to check
+     * @param country to check for
+     * @return if phone number is only numbers
+     */
     private boolean phoneNumberIsOnlyNumbers(String phoneNumber, Country country) {
         String tempNumber = removeWhiteSpaces(phoneNumber);
         if(country == Country.SWE) {
@@ -171,29 +229,49 @@ public class NormalizationHandler {
         return tempNumber.substring(1).matches("[0-9]+");
     }
 
+    /**
+     * Gets a country code from a given phone number
+     * @param phoneNumber to get from
+     * @return country code
+     */
     private String getCountryCodeFromPhoneNumber(String phoneNumber) {
         return phoneNumber.substring(1,3);
     }
 
+    /**
+     * Checks if country code is within the parameters
+     * @param countryCode code to check
+     * @return if country code is correct
+     */
     private boolean isCountryCodeCorrect(String countryCode) {
         return countryCode.equals("47") || countryCode.equals("46") || countryCode.equals("45");
     }
 
+    /**
+     * Removes all whitespaces in a phone number.
+     * @param phoneNumber to check
+     * @return phone number without white spaces.
+     */
     private String removeWhiteSpaces(String phoneNumber) {
         return phoneNumber.replaceAll("\\s+","");
     }
 
-    //TODO needs refactoring to work
+    /**
+     * Checks how much padding is required for a swedish number.
+     * @param phoneNumber to check
+     * @return amount of padding
+     */
     private int swedishRegionalCodePaddingRequired(String phoneNumber) {
         String tempNumber = removeWhiteSpaces(phoneNumber.replaceAll("\\(|\\)+", "").substring(1));
-        /*if(tempNumber.length() == 10) {
-            return 1;
-        } else {
-            return tempNumber.length() - 10;
-        }*/
+
         return 14 - tempNumber.length();
     }
 
+    /**
+     * Adds a regional code to a swedish number
+     * @param phoneNumber to add to
+     * @return phone number with regional code
+     */
     private String addSwedishRegionalCode(String phoneNumber) {
         StringBuilder stringBuilder = new StringBuilder(phoneNumber);
         for(int i = 0; i < swedishRegionalCodePaddingRequired(phoneNumber); i++) {
@@ -202,6 +280,11 @@ public class NormalizationHandler {
         return stringBuilder.toString();
     }
 
+    /**
+     * Enum country based on country code
+     * @param countryCode to get from
+     * @return Enum Country specified for code.
+     */
     private Country getCountryCode(String countryCode) {
         switch (countryCode) {
             case "47":
