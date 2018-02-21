@@ -7,7 +7,8 @@ public class NormalizationHandler {
 
     private boolean phoneNumberNeedsNormalization(String phoneNumber) {
         String tempNumber = phoneNumber;
-        Country country = null;
+        Country country;
+
         if(phoneNumberIsEmpty(tempNumber)) {
             return true;
         }
@@ -52,30 +53,44 @@ public class NormalizationHandler {
         return false;
     }
 
-    //TODO add check if line is empty
-    //TODO need to add check if phone number was correct
     public String normalizePhoneNumber(String phoneNumber) {
 
-        if(phoneNumberIsEmpty(phoneNumber)) {
+        String tempNumber = phoneNumber;
+
+        if(phoneNumberIsEmpty(tempNumber)) {
             return phoneNumber;
         }
 
+        if(!countryCodeIndicatorIsPlusCharacter(tempNumber)) {
+            tempNumber = refactorCountryCodeIndicator(tempNumber);
+        }
 
+        Country country = getCountryCode(getCountryCodeFromPhoneNumber(tempNumber));
 
+        if(country == null) {
+            return phoneNumber;
+        }
+
+        if(!lengthOfPhoneNumberIsWithinLengthRequirements(tempNumber, country)) {
+            return phoneNumber;
+        }
+
+        if(!phoneNumberIsOnlyNumbers(tempNumber, country)) {
+            return phoneNumber;
+        }
+
+        tempNumber = removeWhiteSpaces(tempNumber);
+
+        if(country == Country.NOR) {
+            return normalizeNorwegianPhoneNumber(tempNumber);
+        } else if(country == Country.SWE) {
+            return normalizeSwedishPhoneNumber(tempNumber);
+        } else if(country == Country.DEN) {
+            return normalizeDanishPhoneNumber(tempNumber);
+        }
 
         return phoneNumber;
 
-        /*
-        Rules:
-        has to have length above 8(phonenumber) + 2(countrycode) + 1(Least size of indicator) = 11
-        If 00 -> +
-        substring(1,length) should be able to parse to number, else, not number
-
-        Check that it has country code of either country
-        --> When finished checking this do as follows
-        Check which country it is.
-        Normalize as per country
-        */
     }
 
 
@@ -135,7 +150,7 @@ public class NormalizationHandler {
     }
 
     protected boolean countryCodeIndicatorIsPlusCharacter(String phoneNumber) {
-        return phoneNumber.length() > 0 && phoneNumber.charAt(0) == '+';
+        return phoneNumber.charAt(0) == '+';
     }
 
     protected String refactorCountryCodeIndicator(String phoneNumber) {
@@ -149,7 +164,6 @@ public class NormalizationHandler {
         return phoneNumber.replaceAll("\\s+", "").isEmpty();
     }
 
-    //TODO Requires fixing
     protected boolean phoneNumberIsOnlyNumbers(String phoneNumber, Country country) {
         String tempNumber = removeWhiteSpaces(phoneNumber);
         if(country == Country.SWE) {
@@ -188,5 +202,18 @@ public class NormalizationHandler {
             stringBuilder.insert(3, "0");
         }
         return stringBuilder.toString();
+    }
+
+    private Country getCountryCode(String countryCode) {
+        switch (countryCode) {
+            case "47":
+                return Country.NOR;
+            case "46":
+                return Country.SWE;
+            case "45":
+                return Country.DEN;
+            default:
+                return null;
+        }
     }
 }
