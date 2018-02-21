@@ -94,11 +94,11 @@ public class NormalizationHandler {
 
 
 
-    protected String normalizeNorwegianPhoneNumber(String phoneNumber) {
+    private String normalizeNorwegianPhoneNumber(String phoneNumber) {
         return new StringBuilder(phoneNumber).insert(3, " ").insert(7, " ").insert(10, " ").toString();
     }
 
-    protected String normalizeSwedishPhoneNumber(String phoneNumber) {
+    private String normalizeSwedishPhoneNumber(String phoneNumber) {
 
         if(swedishRegionalCodePaddingRequired(phoneNumber) == 4){
             return new StringBuilder(phoneNumber).insert(3, " (0) ").toString();
@@ -108,7 +108,7 @@ public class NormalizationHandler {
         return new StringBuilder(result).insert(3," (").insert(9, ") ").toString();
     }
 
-    protected String normalizeDanishPhoneNumber(String phoneNumber) {
+    private String normalizeDanishPhoneNumber(String phoneNumber) {
         return new StringBuilder(phoneNumber).insert(3, " ").insert(6, " ").insert(9, " ").insert(12, " ").toString();
     }
     /**
@@ -120,13 +120,13 @@ public class NormalizationHandler {
      * @param phoneNumber to check
      * @return if big enough number.
      */
-    protected boolean lengthOfPhoneNumberIsCorrect(String phoneNumber, Country country) {
+    private boolean lengthOfPhoneNumberIsCorrect(String phoneNumber, Country country) {
 
         switch (country) {
             case NOR:
                 return phoneNumber.length() == 14;
             case SWE:
-                return phoneNumber.length() == 21;
+                return phoneNumber.length() == 19;
             case DEN:
                 return phoneNumber.length() == 15;
             default:
@@ -148,11 +148,11 @@ public class NormalizationHandler {
         }
     }
 
-    protected boolean countryCodeIndicatorIsPlusCharacter(String phoneNumber) {
+    private boolean countryCodeIndicatorIsPlusCharacter(String phoneNumber) {
         return phoneNumber.charAt(0) == '+';
     }
 
-    protected String refactorCountryCodeIndicator(String phoneNumber) {
+    private String refactorCountryCodeIndicator(String phoneNumber) {
         if(phoneNumber.length() > 0) {
             return "+" + phoneNumber.substring(2, phoneNumber.length());
         }
@@ -163,7 +163,7 @@ public class NormalizationHandler {
         return phoneNumber.replaceAll("\\s+", "").isEmpty();
     }
 
-    protected boolean phoneNumberIsOnlyNumbers(String phoneNumber, Country country) {
+    private boolean phoneNumberIsOnlyNumbers(String phoneNumber, Country country) {
         String tempNumber = removeWhiteSpaces(phoneNumber);
         if(country == Country.SWE) {
             if (tempNumber.chars().filter(ch -> ch == '(').count() > 1) {
@@ -178,11 +178,11 @@ public class NormalizationHandler {
         return tempNumber.substring(1).matches("[0-9]+");
     }
 
-    protected String getCountryCodeFromPhoneNumber(String phoneNumber) {
+    private String getCountryCodeFromPhoneNumber(String phoneNumber) {
         return phoneNumber.substring(1,3);
     }
 
-    protected boolean isCountryCodeCorrect(String countryCode) {
+    private boolean isCountryCodeCorrect(String countryCode) {
         return countryCode.equals("47") || countryCode.equals("46") || countryCode.equals("45");
     }
 
