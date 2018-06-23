@@ -1,5 +1,7 @@
 # No Isolation Code Case
 
+A code case I did for a potential summer internship at No Isolation.
+
 Code case solution by Bjørn Olav Salvesen
 Written in Java SE 1.8
 
